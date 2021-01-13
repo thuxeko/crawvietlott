@@ -1,0 +1,1 @@
+mongo_connect = 'mongodb+srv://txkad:oVzaW7FrdRSs49@instameowthu.rc3s7.mongodb.net'
