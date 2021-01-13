@@ -13,14 +13,17 @@ logger = logging.getLogger(__name__)
 
 client = MongoClient(mongo_connect)
 db = client['data_vietlott']  # Database
-# col_645 = db["t_645"]  # Collect(Table)
+col_645 = db["t_645"]  # Collect(Table)
 col_655 = db["t_655"]  # Collect(Table)
 
+# Filter 645
+
 def main():
-    with open('data655.json') as json_file:
-        data = json.load(json_file)
-        col_655.insert_many(data)
-        print("Insert thanh cong")
+    objLatest = col_645.find_one()
+    for x in objLatest:
+        print(len(x))
+        data = json.loads(x)
+        print(data)
 
 if __name__ == '__main__':
     main()
