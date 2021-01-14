@@ -1,29 +1,35 @@
-import json
-from pymongo import MongoClient
+import schedule
+import time
+import mongoQuery
+import getVietlott
+from datetime import date,datetime
 
-import logging
+def get655():
+  obj655 = getVietlott.get655Data()
+  print("Ky: " + str(obj655["KyQuay"]))
+  print("Insert to Mongo")
+  id_mongo = mongoQuery.insert655(obj655)
 
-from credentials import mongo_connect
+  print("Insert thanh cong: " + str(id_mongo))
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
+def get645():
+  obj645 = getVietlott.get645Data()
+  print("Ky: " + str(obj645["KyQuay"]))
+  print("Insert to Mongo")
+  id_mongo = mongoQuery.insert645(obj645)
 
-logger = logging.getLogger(__name__)
+  print("Insert thanh cong: " + str(id_mongo))
 
-client = MongoClient(mongo_connect)
-db = client['data_vietlott']  # Database
-col_645 = db["t_645"]  # Collect(Table)
-col_655 = db["t_655"]  # Collect(Table)
+# Get 645
+schedule.every().wednesday.at('11:00').do(get645)
+schedule.every().friday.at('11:00').do(get645)
+schedule.every().sunday.at('11:00').do(get645)
 
-# Filter 645
+# Get 655
+schedule.every().tuesday.at('11:00').do(get655)
+schedule.every().thursday.at('11:00').do(get655)
+schedule.every().saturday.at('11:00').do(get655)
 
-def main():
-    objLatest = col_645.find_one()
-    for x in objLatest:
-        print(len(x))
-        data = json.loads(x)
-        print(data)
-
-if __name__ == '__main__':
-    main()
+while True:
+  schedule.run_pending()
+  time.sleep(1)
