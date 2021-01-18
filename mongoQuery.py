@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-
+import json
 from credentials import mongo_connect
 
 client = MongoClient(mongo_connect)
@@ -67,3 +67,87 @@ def removeDuplicate():
     for x in oob2:
       duplicates.append(x['dups'][1])
     col_655.delete_many({"_id":{"$in":duplicates}})
+
+def analysis645():
+  lst645 = []
+  obj = col_645.aggregate(
+      [
+          {
+              "$facet": {
+                  "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
+                  "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
+                  "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
+                  "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
+                  "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
+                  "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
+              }
+          },
+          {
+              "$project": {
+                  "data": {
+                      "$concatArrays": [
+                          "$Number1.num",
+                          "$Number2.num",
+                          "$Number3.num",
+                          "$Number4.num",
+                          "$Number5.num",
+                          "$Number6.num",
+                      ]
+                  }
+              }
+          },
+          {"$unwind": "$data"},
+          {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
+          {"$sort" : { "_id.numOut" : 1 }}
+      ]
+  )
+  for x in obj:
+    lst645.append({
+      'Number': x['_id']['numOut'],
+      'Count': x['count']
+    })
+  
+  return json.dumps(lst645)
+
+def analysis655():
+  lst655 = []
+  obj = col_655.aggregate(
+      [
+          {
+              "$facet": {
+                  "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
+                  "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
+                  "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
+                  "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
+                  "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
+                  "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
+                  "Number7": [{"$project": {"_id": 0, "num": "$Number_Bonus"}}],
+              }
+          },
+          {
+              "$project": {
+                  "data": {
+                      "$concatArrays": [
+                          "$Number1.num",
+                          "$Number2.num",
+                          "$Number3.num",
+                          "$Number4.num",
+                          "$Number5.num",
+                          "$Number6.num",
+                          "$Number7.num",
+                      ]
+                  }
+              }
+          },
+          {"$unwind": "$data"},
+          {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
+          {"$sort" : { "_id.numOut" : 1 }}
+      ]
+  )
+  for x in obj:
+    lst655.append({
+      'Number': x['_id']['numOut'],
+      'Count': x['count']
+    })
+  
+  return json.dumps(lst655)
