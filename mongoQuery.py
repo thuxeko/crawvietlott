@@ -47,107 +47,187 @@ def insert655(obj):
     obj655 = col_655.insert_one(obj)
     return obj655.inserted_id
 
+
 # Cau lenh Remove Duplicate(Dung cho moi truong hop)
 def removeDuplicate():
     duplicates = []
     oob2 = col_655.aggregate(
+        [
+            {"$match": {"name": {"$ne": ""}}},
+            {
+                "$group": {
+                    "_id": {"name": "$KyQuay"},
+                    "dups": {"$addToSet": "$_id"},
+                    "count": {"$sum": 1},
+                }
+            },
+            {"$match": {"count": {"$gt": 1}}},
+        ]
+    )
+
+    for x in oob2:
+        duplicates.append(x["dups"][1])
+    col_655.delete_many({"_id": {"$in": duplicates}})
+
+
+def analysis645():
+    lst645 = []
+    obj = col_645.aggregate(
+        [
+            {
+                "$facet": {
+                    "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
+                    "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
+                    "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
+                    "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
+                    "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
+                    "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
+                }
+            },
+            {
+                "$project": {
+                    "data": {
+                        "$concatArrays": [
+                            "$Number1.num",
+                            "$Number2.num",
+                            "$Number3.num",
+                            "$Number4.num",
+                            "$Number5.num",
+                            "$Number6.num",
+                        ]
+                    }
+                }
+            },
+            {"$unwind": "$data"},
+            {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
+            {"$sort": {"_id.numOut": 1}},
+        ]
+    )
+    for x in obj:
+        lst645.append({"Number": x["_id"]["numOut"], "Count": x["count"]})
+
+    return json.dumps(lst645)
+
+
+def analysis655():
+    lst655 = []
+    obj = col_655.aggregate(
+        [
+            {
+                "$facet": {
+                    "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
+                    "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
+                    "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
+                    "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
+                    "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
+                    "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
+                    "Number7": [{"$project": {"_id": 0, "num": "$Number_Bonus"}}],
+                }
+            },
+            {
+                "$project": {
+                    "data": {
+                        "$concatArrays": [
+                            "$Number1.num",
+                            "$Number2.num",
+                            "$Number3.num",
+                            "$Number4.num",
+                            "$Number5.num",
+                            "$Number6.num",
+                            "$Number7.num",
+                        ]
+                    }
+                }
+            },
+            {"$unwind": "$data"},
+            {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
+            {"$sort": {"_id.numOut": 1}},
+        ]
+    )
+    for x in obj:
+        lst655.append({"Number": x["_id"]["numOut"], "Count": x["count"]})
+
+    return json.dumps(lst655)
+
+
+def findWithDate(typeS, fromdate, todate):
+    if typeS == 645:
+        objLatest645 = col_645.aggregate(
             [
-                {"$match": {"name": {"$ne": ""}}},
                 {
-                    "$group": {
-                        "_id": {"name": "$KyQuay"},
-                        "dups": {"$addToSet": "$_id"},
-                        "count": {"$sum": 1},
+                    "$addFields": {
+                        "date_convert": {
+                            "$dateFromString": {
+                                "dateString": "$NgayQuay",
+                                "format": "%d/%m/%Y",
+                            }
+                        }
                     }
                 },
-                {"$match": {"count": {"$gt": 1}}},
+                {"$match": {"date_convert": {"$gte": fromdate, "$lt": todate}}},
+                {"$sort": {"KyQuay": -1}},
             ]
         )
 
-    for x in oob2:
-      duplicates.append(x['dups'][1])
-    col_655.delete_many({"_id":{"$in":duplicates}})
+        return objLatest645
+    else:
+        objLatest655 = col_645.aggregate(
+            [
+                {
+                    "$addFields": {
+                        "date_convert": {
+                            "$dateFromString": {
+                                "dateString": "$NgayQuay",
+                                "format": "%d/%m/%Y",
+                            }
+                        }
+                    }
+                },
+                {"$match": {"date_convert": {"$gte": fromdate, "$lt": todate}}},
+                {"$sort": {"KyQuay": -1}},
+            ]
+        )
 
-def analysis645():
-  lst645 = []
-  obj = col_645.aggregate(
-      [
-          {
-              "$facet": {
-                  "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
-                  "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
-                  "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
-                  "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
-                  "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
-                  "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
-              }
-          },
-          {
-              "$project": {
-                  "data": {
-                      "$concatArrays": [
-                          "$Number1.num",
-                          "$Number2.num",
-                          "$Number3.num",
-                          "$Number4.num",
-                          "$Number5.num",
-                          "$Number6.num",
-                      ]
-                  }
-              }
-          },
-          {"$unwind": "$data"},
-          {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
-          {"$sort" : { "_id.numOut" : 1 }}
-      ]
-  )
-  for x in obj:
-    lst645.append({
-      'Number': x['_id']['numOut'],
-      'Count': x['count']
-    })
-  
-  return json.dumps(lst645)
+        return objLatest655
 
-def analysis655():
-  lst655 = []
-  obj = col_655.aggregate(
-      [
-          {
-              "$facet": {
-                  "Number1": [{"$project": {"_id": 0, "num": "$Number_1"}}],
-                  "Number2": [{"$project": {"_id": 0, "num": "$Number_2"}}],
-                  "Number3": [{"$project": {"_id": 0, "num": "$Number_3"}}],
-                  "Number4": [{"$project": {"_id": 0, "num": "$Number_4"}}],
-                  "Number5": [{"$project": {"_id": 0, "num": "$Number_5"}}],
-                  "Number6": [{"$project": {"_id": 0, "num": "$Number_6"}}],
-                  "Number7": [{"$project": {"_id": 0, "num": "$Number_Bonus"}}],
-              }
-          },
-          {
-              "$project": {
-                  "data": {
-                      "$concatArrays": [
-                          "$Number1.num",
-                          "$Number2.num",
-                          "$Number3.num",
-                          "$Number4.num",
-                          "$Number5.num",
-                          "$Number6.num",
-                          "$Number7.num",
-                      ]
-                  }
-              }
-          },
-          {"$unwind": "$data"},
-          {"$group": {"_id": {"numOut": "$data"}, "count": {"$sum": 1}}},
-          {"$sort" : { "_id.numOut" : 1 }}
-      ]
-  )
-  for x in obj:
-    lst655.append({
-      'Number': x['_id']['numOut'],
-      'Count': x['count']
-    })
-  
-  return json.dumps(lst655)
+
+def findWithDayOfWeek(typeS, lstDay):
+    if typeS == 645:
+        objLatest645 = col_645.aggregate(
+            [
+                {
+                    "$addFields": {
+                        "dayofweek": {
+                            "$dayOfWeek": {
+                                "$dateFromString": {
+                                    "dateString": "$NgayQuay",
+                                    "format": "%d/%m/%Y",
+                                }
+                            }
+                        }
+                    }
+                },
+                {"$match": {"dayofweek": {"$in": lstDay}}},
+            ]
+        )
+
+        return objLatest645
+    else:
+        objLatest655 = col_655.aggregate(
+            [
+                {
+                    "$addFields": {
+                        "dayofweek": {
+                            "$dayOfWeek": {
+                                "$dateFromString": {
+                                    "dateString": "$NgayQuay",
+                                    "format": "%d/%m/%Y",
+                                }
+                            }
+                        }
+                    }
+                },
+                {"$match": {"dayofweek": {"$in": lstDay}}},
+            ]
+        )
+        return objLatest655
