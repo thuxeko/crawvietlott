@@ -231,3 +231,45 @@ def findWithDayOfWeek(typeS, lstDay):
             ]
         )
         return objLatest655
+
+
+def getLstKy(typeL):
+    if typeL == 645:
+        obj = col_645.aggregate(
+            [
+                {
+                    "$project": {
+                        "_id": 0,
+                        "data": [
+                            "$Number_1",
+                            "$Number_2",
+                            "$Number_3",
+                            "$Number_4",
+                            "$Number_5",
+                            "$Number_6",
+                        ],
+                    }
+                }
+            ]
+        )
+        return obj
+        
+    if typeL == 655:
+        obj = col_655.aggregate(
+            [
+                {
+                    "$project": {
+                        "_id": 0,
+                        "data": [
+                            "$Number_1",
+                            "$Number_2",
+                            "$Number_3",
+                            "$Number_4",
+                            "$Number_5",
+                            "$Number_6",
+                        ],
+                    }
+                }
+            ]
+        )
+        return obj
