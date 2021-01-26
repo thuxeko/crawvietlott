@@ -33,76 +33,46 @@ lstOut = []
 
 dv.get("https://vietlott.vn/vi/trung-thuong/ket-qua-trung-thuong/645")
 
-objBall = dv.find_elements_by_xpath("//*[contains(@class, 'bong_tron')]")
-objBall = dv.find_elements_by_xpath("//span[contains(@class, 'bong_tron')]")
-
-for x in objBall:
-    print(x.text)
 # Wait load page
-# for x in range(689):
-#     if x == 0:
-#         objTic = {
-#             "KyQuay": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[1]"
-#             ).text.replace("#", "")),
-#             "NgayQuay": dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[2]"
-#             ).text,
-#             "Number_1": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[1]"
-#             ).text.replace("#", "")),
-#             "Number_2": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[2]"
-#             ).text.replace("#", "")),
-#             "Number_3": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[3]"
-#             ).text.replace("#", "")),
-#             "Number_4": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[4]"
-#             ).text.replace("#", "")),
-#             "Number_5": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[5]"
-#             ).text.replace("#", "")),
-#             "Number_6": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[6]"
-#             ).text.replace("#", ""))
-#         }
-#         print("Ky: " + str(objTic["KyQuay"]))
-#         lstOut.append(objTic)
-#     else:
-#         prButton = dv.find_element_by_xpath(
-#             "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[2]/a[1]"
-#         )
-#         prButton.click()
-#         sleep(5)
-#         objTic = {
-#             "KyQuay": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[1]"
-#             ).text.replace("#", "")),
-#             "NgayQuay": dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[2]"
-#             ).text,
-#             "Number_1": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[1]"
-#             ).text.replace("#", "")),
-#             "Number_2": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[2]"
-#             ).text.replace("#", "")),
-#             "Number_3": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[3]"
-#             ).text.replace("#", "")),
-#             "Number_4": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[4]"
-#             ).text.replace("#", "")),
-#             "Number_5": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[5]"
-#             ).text.replace("#", "")),
-#             "Number_6": int(dv.find_element_by_xpath(
-#                 "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[6]"
-#             ).text.replace("#", ""))
-#         }
-#         print("Ky: " + str(objTic["KyQuay"]))
-#         lstOut.append(objTic)
+for x in range(689):
+    if x == 0:
+        objBall = dv.find_elements_by_xpath("//*[contains(@class, 'bong_tron')]")
+        objText = dv.find_elements_by_xpath("//div[@class='chitietketqua_title']/h5/b")
 
-# with open('645.json', 'w') as outfile:
-#     json.dump(lstOut, outfile)
+        objTic = {
+            "KyQuay": int(objText[0].text.replace("#", "")),
+            "NgayQuay": objText[1].text,
+            "Number_1": int(objBall[0]),
+            "Number_2": int(objBall[1]),
+            "Number_3": int(objBall[2]),
+            "Number_4": int(objBall[3]),
+            "Number_5": int(objBall[4]),
+            "Number_6": int(objBall[5])
+        }
+        print("Ky: " + str(objTic["KyQuay"]))
+        lstOut.append(objTic)
+    else:
+        prButton = dv.find_element_by_xpath(
+            "/html/body/div[6]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[2]/a[1]"
+        )
+        prButton.click()
+        sleep(5)
+
+        objBallN = dv.find_elements_by_xpath("//*[contains(@class, 'bong_tron')]")
+        objTextN = dv.find_elements_by_xpath("//div[@class='chitietketqua_title']/h5/b")
+
+        objTic = {
+            "KyQuay": int(objTextN[0].text.replace("#", "")),
+            "NgayQuay": objTextN[1].text,
+            "Number_1": int(objBallN[0]),
+            "Number_2": int(objBallN[1]),
+            "Number_3": int(objBallN[2]),
+            "Number_4": int(objBallN[3]),
+            "Number_5": int(objBallN[4]),
+            "Number_6": int(objBallN[5])
+        }
+        print("Ky: " + str(objTic["KyQuay"]))
+        lstOut.append(objTic)
+
+with open('645.json', 'w') as outfile:
+    json.dump(lstOut, outfile)

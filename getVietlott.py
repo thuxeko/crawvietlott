@@ -14,63 +14,37 @@ dv = webdriver.Chrome(executable_path=os.environ.get(
 
 def get645Data():
     dv.get("https://vietlott.vn/vi/trung-thuong/ket-qua-trung-thuong/645")
+
+    objBall = dv.find_elements_by_xpath("//*[contains(@class, 'bong_tron')]")
+    objText = dv.find_elements_by_xpath("//div[@class='chitietketqua_title']/h5/b")
+
     objTic = {
-            "KyQuay": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[1]"
-            ).text.replace("#", "")),
-            "NgayQuay": dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[2]"
-            ).text,
-            "Number_1": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[1]"
-            ).text.replace("#", "")),
-            "Number_2": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[2]"
-            ).text.replace("#", "")),
-            "Number_3": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[3]"
-            ).text.replace("#", "")),
-            "Number_4": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[4]"
-            ).text.replace("#", "")),
-            "Number_5": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[5]"
-            ).text.replace("#", "")),
-            "Number_6": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[6]"
-            ).text.replace("#", ""))
+            "KyQuay": int(objText[0].text.replace("#", "")),
+            "NgayQuay": objText[1].text,
+            "Number_1": int(objBall[0].text),
+            "Number_2": int(objBall[1].text),
+            "Number_3": int(objBall[2].text),
+            "Number_4": int(objBall[3].text),
+            "Number_5": int(objBall[4].text),
+            "Number_6": int(objBall[5].text)
         }
     return objTic
 
 def get655Data():
     dv.get("https://vietlott.vn/vi/trung-thuong/ket-qua-trung-thuong/655")
+
+    objText = dv.find_elements_by_xpath("//div[@class='chitietketqua_title']/h5/b")
+    objBall = dv.find_elements_by_xpath("//*[contains(@class, 'bong_tron')]")
+    
     objTic = {
-            "KyQuay": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[1]"
-            ).text.replace("#", "")),
-            "NgayQuay": dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[1]/div/div/h5/b[2]"
-            ).text,
-            "Number_1": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[1]"
-            ).text.replace("#", "")),
-            "Number_2": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[2]"
-            ).text.replace("#", "")),
-            "Number_3": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[3]"
-            ).text.replace("#", "")),
-            "Number_4": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[4]"
-            ).text.replace("#", "")),
-            "Number_5": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[5]"
-            ).text.replace("#", "")),
-            "Number_6": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[6]"
-            ).text.replace("#", "")),
-            "Number_Bonus": int(dv.find_element_by_xpath(
-                "/html/body/div[3]/div[5]/div/div[1]/div[1]/div/div[2]/div/div[1]/span[7]"
-            ).text.replace("#", ""))
+            "KyQuay": int(objText[0].text.replace("#", "")),
+            "NgayQuay": objText[1].text,
+            "Number_1": int(objBall[0].text),
+            "Number_2": int(objBall[1].text),
+            "Number_3": int(objBall[2].text),
+            "Number_4": int(objBall[3].text),
+            "Number_5": int(objBall[4].text),
+            "Number_6": int(objBall[5].text),
+            "Number_Bonus": int(objBall[6].text)
         }
     return objTic
